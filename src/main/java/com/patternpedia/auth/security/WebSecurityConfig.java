@@ -2,6 +2,8 @@ package com.patternpedia.auth.security;
 
 import com.patternpedia.auth.error.CustomAuthenticationEntryPoint;
 
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.web.filter.CorsFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,27 +28,22 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import javax.sql.DataSource;
-import javax.xml.crypto.Data;
-
-import java.util.Arrays;
-
-import static org.springframework.security.config.Customizer.withDefaults;
+/**
+ * Identify user
+ * */
 
 @Configuration
 @EnableWebSecurity
-//@EnableWebMvc
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    Logger logger = LoggerFactory.getLogger(AuthorizationServerConfig.class);
+    Logger logger = LoggerFactory.getLogger(WebSecurityConfig.class);
 
     private UserDetailsService userDetailsService;
 
-    public WebSecurityConfig(CustomAuthenticationEntryPoint customAuthenticationEntryPoint, @Qualifier("userService")
-            UserDetailsService userDetailsService) {
+//    public WebSecurityConfig(CustomAuthenticationEntryPoint customAuthenticationEntryPoint,
+    public WebSecurityConfig(@Qualifier("userService") UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
-
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
@@ -81,5 +78,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         //IMPORTANT
         bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
         return bean;
+    }
+
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .authorizeRequests()
+                    .antMatchers( "/oauth/token/**" ,"/oauth/check_token/**", "/alive", "/userinfo").permitAll()
+//                    .antMatchers("/admin/**").hasRole("ADMIN")
+//                    .antMatchers("/db/**").access("hasRole('ADMIN') and hasRole('DBA')")
+                    .anyRequest().authenticated()
+                    .and()
+                .formLogin();
     }
 }

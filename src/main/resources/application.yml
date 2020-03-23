@@ -4,10 +4,10 @@ server:
 #    context-path: /auth
 
 spring:
-#  security:
-#    user:
-#      password: pass
-#      name: user
+  security:
+    user:
+      password: pass
+      name: user
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
@@ -17,8 +17,13 @@ spring:
 #security:
 #  oauth2:
 #    client:
-#      client-id: a
-#      client-secret: a
+#      client-id: first-client
+#      client-secret: noonewilleverguess
+#security:
+#  oauth2:
+#    client:
+#      client-id: pattern-pedia-client
+#      client-secret: iamaghost
 #      authorized-grant-types: authorization_code,refresh_token,password
 #      security.oauth2.client.scope: openid
 

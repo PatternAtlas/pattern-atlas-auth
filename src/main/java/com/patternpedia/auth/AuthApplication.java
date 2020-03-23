@@ -21,10 +21,10 @@ import java.util.UUID;
 @SpringBootApplication
 @RestController
 @EnableAuthorizationServer
-@EnableResourceServer
+//@EnableResourceServer
 public class AuthApplication {
 
-	@RequestMapping("/user")
+	@RequestMapping("/userinfo")
 	public Principal user(Principal user) {
 		return user;
 	}
