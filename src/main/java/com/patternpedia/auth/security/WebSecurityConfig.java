@@ -82,12 +82,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests()
-                    .antMatchers( "/oauth/token/**" ,"/oauth/check_token/**", "/alive", "/userinfo").permitAll()
-//                    .antMatchers("/admin/**").hasRole("ADMIN")
-//                    .antMatchers("/db/**").access("hasRole('ADMIN') and hasRole('DBA')")
-                    .anyRequest().authenticated()
-                    .and()
-                .formLogin();
+                .formLogin().loginPage("/login").permitAll()
+//                .formLogin().permitAll()
+                .and()
+                .requestMatchers().antMatchers("/login", "/oauth/authorize", "/oauth/confirm_access")
+                .and()
+                .authorizeRequests().anyRequest().authenticated();
+
+
+        //"/alive", "/userinfo"
     }
 }
