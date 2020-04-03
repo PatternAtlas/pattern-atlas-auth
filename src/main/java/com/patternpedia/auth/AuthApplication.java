@@ -20,7 +20,7 @@ import java.util.UUID;
 
 @SpringBootApplication
 @RestController
-@EnableAuthorizationServer
+//@EnableAuthorizationServer
 //@EnableResourceServer
 public class AuthApplication {
 

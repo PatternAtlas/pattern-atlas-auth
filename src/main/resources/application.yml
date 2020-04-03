@@ -16,14 +16,27 @@ spring:
 
 #security:
 #  oauth2:
+#    client:
+#      client-id: pattern-pedia-private
+#      client-secret: pattern-pedia-secret
 #    resource:
-#      filter-order: 3
+#      jwt:
+#        key-value: pattern-pedia
+#  jwt:
+#    key-store: classpath:pattern-pedia-jwt.jks
+#    key-store-password: pattern-pedia-store-pass
+#    key-pair-alias: pattern-pediaoauth-jwt
+#    key-pair-password: pattern-pedia-key-pass
+#    authorizedGrantTypes: authorization_code, refresh_token
+#    accessTokenValidititySeconds: 43200 # 12 hours
+#    refreshTokenValiditySeconds: 2592000 # 30 days
 
 #security:
 #  oauth2:
-#    client:
-#      client-id: first-client
-#      client-secret: noonewilleverguess
+#    resource:
+#      filter-order: 3
+
+
 #security:
 #  oauth2:
 #    client:

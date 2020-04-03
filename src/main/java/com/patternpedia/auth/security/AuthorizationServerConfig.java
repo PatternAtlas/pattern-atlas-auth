@@ -1,5 +1,9 @@
 package com.patternpedia.auth.security;
 
+import com.nimbusds.jose.JWSAlgorithm;
+import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.KeyUse;
+import com.nimbusds.jose.jwk.RSAKey;
 import com.patternpedia.auth.pkce.PkceAuthorizationCodeServices;
 import com.patternpedia.auth.pkce.PkceAuthorizationCodeTokenGranter;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +15,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -37,16 +42,17 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 
 import javax.sql.DataSource;
+import java.security.Key;
 import java.security.KeyPair;
+import java.security.interfaces.RSAPublicKey;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import static org.hibernate.criterion.Restrictions.and;
 
-//
-//@Slf4j
 @Configuration
-////@EnableConfigurationProperties(SecurityProperties.class)
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
@@ -55,17 +61,23 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final UserDetailsService userService;
+//    private final KeyPair keyPair;
 
-    @Value("${jwt.clientId:pattern-pedia}")
+    private static final String KEY_STORE_FILE = "pattern-pedia-jwt.jks";
+    private static final String KEY_STORE_PASSWORD = "pattern-pedia-pass";
+    private static final String KEY_ALIAS = "pattern-pedia-oauth-jwt";
+    private static final String JWK_KID = "pattern-pedia-key-id";
+
+    @Value("${security.oauth2.client.client-id:pattern-pedia-private}")
     private String clientId;
 
-    @Value("${jwt.client-secret:iamaghost}")
+    @Value("${security.oauth2.client.client-secret:pattern-pedia-secret}")
     private String clientSecret;
 
     @Value("${jwt.accessTokenValidititySeconds:43200}") // 12 hours
     private int accessTokenValiditySeconds;
 
-    @Value("${jwt.authorizedGrantTypes:authorization_code,refresh_token}")
+    @Value("${jwt.authorizedGrantTypes:authorization_code, refresh_token}")
     private String[] authorizedGrantTypes;
 
     @Value("${jwt.refreshTokenValiditySeconds:2592000}") // 30 days
@@ -73,24 +85,28 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     public AuthorizationServerConfig(final AuthenticationManager authenticationManager, final PasswordEncoder passwordEncoder,
                                      final UserDetailsService userService) {
+
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
+//        this.keyPair = keyPair;
+//        this.securityProperties = securityProperties;
     }
-//
+
+    //
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         logger.info(clients.toString());
         clients.inMemory()
-                .withClient("pattern-pedia-private")
-                .secret(passwordEncoder.encode("pattern-pedia-secret"))
+                .withClient(clientId)
+                .secret(passwordEncoder.encode(clientSecret))
                 .accessTokenValiditySeconds(accessTokenValiditySeconds)
                 .refreshTokenValiditySeconds(refreshTokenValiditySeconds)
                 .authorizedGrantTypes(authorizedGrantTypes)
                 .scopes("read", "write")
-                .resourceIds("user/**")
+                .resourceIds("pattern-pedia-api")
                 .redirectUris("http://localhost:4200")
-            .and()
+                .and()
                 .withClient("pattern-pedia-public")
                 .secret(passwordEncoder.encode(""))
                 .accessTokenValiditySeconds(accessTokenValiditySeconds)
@@ -100,18 +116,23 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .resourceIds("user/**")
                 .redirectUris("http://localhost:4200");
     }
-//
+
+    //
     @Override
     public void configure(final AuthorizationServerEndpointsConfigurer endpoints) {
         endpoints
                 .accessTokenConverter(jwtAccessTokenConverter())
                 .userDetailsService(this.userService)
                 .authenticationManager(this.authenticationManager)
+                .tokenStore(tokenStore())
                 .authorizationCodeServices(new PkceAuthorizationCodeServices(endpoints.getClientDetailsService(), passwordEncoder))
                 .tokenGranter(tokenGranter(endpoints));
 
     }
 
+    /**
+     * RPKC Authentication flow
+     */
     private TokenGranter tokenGranter(final AuthorizationServerEndpointsConfigurer endpoints) {
         List<TokenGranter> granters = new ArrayList<>();
 
@@ -135,29 +156,55 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     }
 
     @Bean
-    JwtAccessTokenConverter jwtAccessTokenConverter() {
-        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        return converter;
+    public KeyPair keyPair() {
+        ClassPathResource ksFile = new ClassPathResource(KEY_STORE_FILE);
+        KeyStoreKeyFactory ksFactory = new KeyStoreKeyFactory(ksFile, KEY_STORE_PASSWORD.toCharArray());
+        KeyPair keyPair = ksFactory.getKeyPair(KEY_ALIAS, KEY_STORE_PASSWORD.toCharArray());
+
+        return keyPair;
+    }
+
+    @Bean
+    public JWKSet jwkSet() {
+        RSAKey.Builder builder = new RSAKey.Builder((RSAPublicKey) keyPair().getPublic()).keyUse(KeyUse.SIGNATURE)
+                .algorithm(JWSAlgorithm.RS256)
+                .keyID(JWK_KID);
+        return new JWKSet(builder.build());
+    }
+
+    @Bean
+    public JwtAccessTokenConverter jwtAccessTokenConverter() {
+
+//        JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
+//        jwtAccessTokenConverter.setKeyPair(keyPair());
+//        jwtAccessTokenConverter.setSigningKey("key");
+
+        Map<String, String> customHeaders = Collections.singletonMap("kid", JWK_KID);
+        return new  JwtCustomHeadersAccessTokenConverter(customHeaders, keyPair());
+//        return jwtAccessTokenConverter;
     }
 
     @Bean
     @Primary
-    public DefaultTokenServices tokenServices() {
-        DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
-        defaultTokenServices.setTokenStore(tokenStore());
-        defaultTokenServices.setSupportRefreshToken(true);
-        return defaultTokenServices;
+    public DefaultTokenServices tokenServices(final TokenStore tokenStore,
+                                              final ClientDetailsService clientDetailsService) {
+        DefaultTokenServices tokenServices = new DefaultTokenServices();
+        tokenServices.setSupportRefreshToken(true);
+        tokenServices.setTokenStore(tokenStore);
+        tokenServices.setClientDetailsService(clientDetailsService);
+        tokenServices.setAuthenticationManager(this.authenticationManager);
+        return tokenServices;
     }
 
     @Override
-    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception
-    {
+    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
         security
-                .checkTokenAccess("permitAll()")
-//                .checkTokenAccess("isAuthenticated()")
+                .tokenKeyAccess("permitAll()")
+                .checkTokenAccess("isAuthenticated()")
+//                .checkTokenAccess("permitAll()")
+//                .checkTokenAccess("hasAuthority('MEMBER')")
                 .allowFormAuthenticationForClients();
 
     }
-//
 }
 //

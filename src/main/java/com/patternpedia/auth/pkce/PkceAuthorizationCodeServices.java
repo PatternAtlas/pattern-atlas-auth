@@ -1,5 +1,6 @@
 package com.patternpedia.auth.pkce;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.common.exceptions.InvalidRequestException;
 import org.springframework.security.oauth2.common.util.RandomValueStringGenerator;
@@ -11,6 +12,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Slf4j
 public class PkceAuthorizationCodeServices implements AuthorizationCodeServices {
 
     private final RandomValueStringGenerator generator = new RandomValueStringGenerator();
@@ -60,6 +62,7 @@ public class PkceAuthorizationCodeServices implements AuthorizationCodeServices 
     }
 
     private boolean isPublicClient(String clientId) {
+        log.info(clientId);
         String clientSecret = clientDetailsService.loadClientByClientId(clientId).getClientSecret();
         return clientSecret == null || passwordEncoder.matches("", clientSecret);
     }

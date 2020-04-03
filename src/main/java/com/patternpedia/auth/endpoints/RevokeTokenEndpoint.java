@@ -1,4 +1,4 @@
-package com.patternpedia.auth.security;
+package com.patternpedia.auth.endpoints;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,20 +17,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-//@FrameworkEndpoint
-@Controller
+@FrameworkEndpoint
+//@Controller
 public class RevokeTokenEndpoint {
 
-    @Resource(name = "tokenServices")
+
     ConsumerTokenServices tokenServices;
 
-    @RequestMapping(method = RequestMethod.GET, value = "/oauth/revoke_token")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/oauth/revoke_token")
     @ResponseBody
     public boolean revokeToken(HttpServletRequest request) {
         String authorization = request.getHeader("Authorization");
         if (authorization != null && authorization.contains("Bearer")){
             String tokenId = authorization.substring("Bearer".length()+1);
-            return tokenServices.revokeToken(tokenId);
+            log.info(tokenId);
+            Boolean success = tokenServices.revokeToken(tokenId);
+            log.info("{}",success);
+            return success;
         }
         return false;
     }
