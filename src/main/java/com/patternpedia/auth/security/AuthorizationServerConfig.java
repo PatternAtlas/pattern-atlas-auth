@@ -36,11 +36,18 @@ import org.springframework.security.oauth2.provider.password.ResourceOwnerPasswo
 import org.springframework.security.oauth2.provider.refresh.RefreshTokenGranter;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.sql.DataSource;
 import java.security.Key;
 import java.security.KeyPair;
@@ -68,13 +75,13 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private static final String KEY_ALIAS = "pattern-pedia-oauth-jwt";
     private static final String JWK_KID = "pattern-pedia-key-id";
 
-    @Value("${security.oauth2.client.client-id:pattern-pedia-private}")
-    private String clientId;
+//    @Value("${security.oauth2.client.client-id:pattern-pedia-private}")
+//    private String clientId;
+//
+//    @Value("${security.oauth2.client.client-secret:pattern-pedia-secret}")
+//    private String clientSecret;
 
-    @Value("${security.oauth2.client.client-secret:pattern-pedia-secret}")
-    private String clientSecret;
-
-    @Value("${jwt.accessTokenValidititySeconds:43200}") // 12 hours
+    @Value("${jwt.accessTokenValidititySeconds:1036800}") // 12 hours
     private int accessTokenValiditySeconds;
 
     @Value("${jwt.authorizedGrantTypes:authorization_code, refresh_token}")
@@ -98,8 +105,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         logger.info(clients.toString());
         clients.inMemory()
-                .withClient(clientId)
-                .secret(passwordEncoder.encode(clientSecret))
+                .withClient("pattern-pedia-private")
+                .secret(passwordEncoder.encode("pattern-pedia-secret"))
+                .autoApprove(true)
                 .accessTokenValiditySeconds(accessTokenValiditySeconds)
                 .refreshTokenValiditySeconds(refreshTokenValiditySeconds)
                 .authorizedGrantTypes(authorizedGrantTypes)
@@ -108,7 +116,19 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .redirectUris("http://localhost:4200")
                 .and()
                 .withClient("pattern-pedia-public")
+//                .secret(passwordEncoder.encode("pattern-pedia-secret-public"))
                 .secret(passwordEncoder.encode(""))
+                .autoApprove(true)
+                .accessTokenValiditySeconds(accessTokenValiditySeconds)
+                .refreshTokenValiditySeconds(refreshTokenValiditySeconds)
+                .authorizedGrantTypes(authorizedGrantTypes)
+                .scopes("read", "write")
+                .resourceIds("pattern-pedia-api")
+                .redirectUris("http://localhost:4200")
+                .and()
+                .withClient("pattern-pedia-pkce")
+                .secret(passwordEncoder.encode(""))
+                .autoApprove(true)
                 .accessTokenValiditySeconds(accessTokenValiditySeconds)
                 .refreshTokenValiditySeconds(refreshTokenValiditySeconds)
                 .authorizedGrantTypes(authorizedGrantTypes)
@@ -125,9 +145,27 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .userDetailsService(this.userService)
                 .authenticationManager(this.authenticationManager)
                 .tokenStore(tokenStore())
+//                .tokenEnhancer(tokenEnhancer())
                 .authorizationCodeServices(new PkceAuthorizationCodeServices(endpoints.getClientDetailsService(), passwordEncoder))
-                .tokenGranter(tokenGranter(endpoints));
-
+                .tokenGranter(tokenGranter(endpoints))
+                .addInterceptor(new HandlerInterceptorAdapter() {
+                    @Override
+                    public void postHandle(HttpServletRequest request,
+                                           HttpServletResponse response, Object handler,
+                                           ModelAndView modelAndView) throws Exception {
+                        if (modelAndView != null
+                                && modelAndView.getView() instanceof RedirectView) {
+                            RedirectView redirect = (RedirectView) modelAndView.getView();
+                            String url = redirect.getUrl();
+                            if (url.contains("code=") || url.contains("error=")) {
+                                HttpSession session = request.getSession(false);
+                                if (session != null) {
+                                    session.invalidate();
+                                }
+                            }
+                        }
+                    }
+                });
     }
 
     /**
@@ -154,6 +192,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public TokenStore tokenStore() {
         return new JwtTokenStore(jwtAccessTokenConverter());
     }
+
+//    @Bean
+//    public TokenEnhancer tokenEnhancer() {
+//        return new CustomTokenEnhancer();
+//    }
 
     @Bean
     public KeyPair keyPair() {
@@ -186,13 +229,13 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Bean
     @Primary
-    public DefaultTokenServices tokenServices(final TokenStore tokenStore,
-                                              final ClientDetailsService clientDetailsService) {
+    public DefaultTokenServices tokenServices(final TokenStore tokenStore, final ClientDetailsService clientDetailsService) {
         DefaultTokenServices tokenServices = new DefaultTokenServices();
         tokenServices.setSupportRefreshToken(true);
-        tokenServices.setTokenStore(tokenStore);
+        tokenServices.setTokenStore(this.tokenStore());
         tokenServices.setClientDetailsService(clientDetailsService);
         tokenServices.setAuthenticationManager(this.authenticationManager);
+//        tokenServices.setTokenEnhancer(tokenEnhancer());
         return tokenServices;
     }
 

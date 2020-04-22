@@ -3,16 +3,20 @@ package com.patternpedia.auth.security;
 import java.security.KeyPair;
 import java.security.interfaces.RSAPrivateKey;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.jwt.JwtHelper;
 import org.springframework.security.jwt.crypto.sign.RsaSigner;
+import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.util.JsonParser;
 import org.springframework.security.oauth2.common.util.JsonParserFactory;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
+@Slf4j
 public class JwtCustomHeadersAccessTokenConverter extends JwtAccessTokenConverter {
 
     private Map<String, String> customHeaders = new HashMap<>();
@@ -27,10 +31,34 @@ public class JwtCustomHeadersAccessTokenConverter extends JwtAccessTokenConverte
     }
 
     @Override
+    public OAuth2AccessToken enhance(OAuth2AccessToken accessToken,
+                                     OAuth2Authentication authentication) {
+
+//        PatternPediaUser user = (PatternPediaUser) authentication.getPrincipal();
+        Map<String, Object> info = new LinkedHashMap<String, Object>(
+                accessToken.getAdditionalInformation());
+
+//        info.put("user_id", user.getId());
+        info.put("iss", "pattern-pedia");
+        info.put("sub", "PatternPediaApi Access");
+
+        ((DefaultOAuth2AccessToken) accessToken)
+                .setAdditionalInformation(info);
+
+        accessToken = super.enhance(accessToken, authentication);
+        ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(new HashMap<>());
+//        DefaultOAuth2AccessToken customAccessToken = new DefaultOAuth2AccessToken(accessToken);
+//        customAccessToken.setAdditionalInformation(info);
+        return accessToken;
+
+    }
+
+    @Override
     protected String encode(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
         String content;
         try {
             content = this.objectMapper.formatMap(getAccessTokenConverter().convertAccessToken(accessToken, authentication));
+            log.info(content);
         } catch (Exception ex) {
             throw new IllegalStateException("Cannot convert access token to JSON", ex);
         }

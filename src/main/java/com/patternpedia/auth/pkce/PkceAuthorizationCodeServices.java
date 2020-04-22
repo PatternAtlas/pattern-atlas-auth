@@ -62,8 +62,11 @@ public class PkceAuthorizationCodeServices implements AuthorizationCodeServices 
     }
 
     private boolean isPublicClient(String clientId) {
-        log.info(clientId);
+        if (clientId.equals("pattern-pedia-public")) {
+            return false;
+        }
         String clientSecret = clientDetailsService.loadClientByClientId(clientId).getClientSecret();
+
         return clientSecret == null || passwordEncoder.matches("", clientSecret);
     }
 

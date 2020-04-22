@@ -1,5 +1,10 @@
 package com.patternpedia.auth.security;
 
+import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.web.filter.CorsFilter;
 import org.slf4j.Logger;
@@ -26,8 +31,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
-//@Order(1)
-//@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
+@Order(1)
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     Logger logger = LoggerFactory.getLogger(WebSecurityConfig.class);
@@ -86,7 +91,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .requestMatchers()
 //                .antMatchers(HttpMethod.DELETE, "/oauth/token")
 //                .antMatchers("/login", "/oauth/authorize", "/create")
-                .antMatchers("/login", "/oauth/authorize")
+                .antMatchers("/login", "/oauth/authorize", "/oauth/token", "/signup", "/create", "/login.css")
                 .mvcMatchers("/.well-known/jwks.json")
 
 
@@ -95,7 +100,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .and()
                 .authorizeRequests()
                 .mvcMatchers("/.well-known/jwks.json").permitAll()
-//                .antMatchers(HttpMethod.DELETE, "/oauth/token").permitAll()
+                .antMatchers("/oauth/token").permitAll()
+                .antMatchers( "/signup", "/create").permitAll()
+                .antMatchers("/login.css").permitAll()
                 .anyRequest().authenticated();
 //                .anyRequest().permitAll();
 
