@@ -42,7 +42,7 @@ public class UserEndPoint {
 
             Jwt jwt = JwtHelper.decode(tokenId);
             Map<String, Object> claims = objectMapper.readValue(jwt.getClaims(), Map.class);
-            String userId = (String) claims.get("user_name");
+            String userId = (String) claims.get("user_id");
             log.info("userInfo for id: {}", userId);
             UserEntity user = userRepository.findById(UUID.fromString(userId)).orElseThrow(() -> new RuntimeException(userId));
             model.put("name", user.getName());

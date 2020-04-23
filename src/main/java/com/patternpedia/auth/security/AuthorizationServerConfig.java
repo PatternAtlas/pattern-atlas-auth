@@ -84,6 +84,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Value("${jwt.accessTokenValidititySeconds:1036800}") // 12 hours
     private int accessTokenValiditySeconds;
 
+//    @Value("${jwt.accessTokenValidititySeconds:10}") // 12 hours
+//    private int accessTokenValiditySeconds;
+
     @Value("${jwt.authorizedGrantTypes:authorization_code, refresh_token}")
     private String[] authorizedGrantTypes;
 

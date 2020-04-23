@@ -1,5 +1,6 @@
 package com.patternpedia.auth.security;
 
+import com.patternpedia.auth.user.PatternPediaUser;
 import com.patternpedia.auth.user.UserEntity;
 import com.patternpedia.auth.user.UserRepository;
 import com.patternpedia.auth.user.UserRole;
@@ -38,8 +39,8 @@ public class UserService implements UserDetailsService {
         log.info(user.toString());
         List<SimpleGrantedAuthority> authorities = getAuthorities(user.getRole());
         log.info("{} has role of {}", username, authorities);
-//        return new PatternPediaUser(user.getMail(), user.getPassword(), authorities, user.getId());
-        return new org.springframework.security.core.userdetails.User(user.getId().toString(), user.getPassword(), authorities);
+        return new PatternPediaUser(user.getMail(), user.getPassword(), authorities, user.getId());
+//        return new org.springframework.security.core.userdetails.User(user.getId().toString(), user.getPassword(), authorities);
     }
 
     private List<SimpleGrantedAuthority> getAuthorities(List<UserRole> roles) {
