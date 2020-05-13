@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
@@ -27,18 +28,20 @@ public class UserEntity implements Serializable {
     @Enumerated(EnumType.STRING)
     @ElementCollection
     @Type(type = "pgsql_enum")
-    private List<UserRole> role = new ArrayList<>(Arrays.asList(UserRole.MEMBER));
+    private List<UserRole> roles = new ArrayList<>(Arrays.asList(UserRole.MEMBER));
 
-    private String mail;
+    @NaturalId(mutable = true)
+    @Column(nullable = false, unique = true)
+    private String email;
 
     private String name;
 
     @JsonIgnore
     private String password;
 
-    public UserEntity(String name, String mail, String password) {
+    public UserEntity(String name, String email, String password) {
         this.name = name;
-        this.mail = mail;
+        this.email = email;
         this.password = password;
     }
 
