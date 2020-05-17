@@ -68,24 +68,14 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final UserDetailsService userService;
-//    private final KeyPair keyPair;
 
     private static final String KEY_STORE_FILE = "pattern-pedia-jwt.jks";
     private static final String KEY_STORE_PASSWORD = "pattern-pedia-pass";
     private static final String KEY_ALIAS = "pattern-pedia-oauth-jwt";
     private static final String JWK_KID = "pattern-pedia-key-id";
 
-//    @Value("${security.oauth2.client.client-id:pattern-pedia-private}")
-//    private String clientId;
-//
-//    @Value("${security.oauth2.client.client-secret:pattern-pedia-secret}")
-//    private String clientSecret;
-
     @Value("${jwt.accessTokenValidititySeconds:1036800}") // 12 hours
     private int accessTokenValiditySeconds;
-
-//    @Value("${jwt.accessTokenValidititySeconds:10}") // 12 hours
-//    private int accessTokenValiditySeconds;
 
     @Value("${jwt.authorizedGrantTypes:authorization_code, refresh_token}")
     private String[] authorizedGrantTypes;
@@ -99,11 +89,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
-//        this.keyPair = keyPair;
-//        this.securityProperties = securityProperties;
     }
 
-    //
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         logger.info(clients.toString());
@@ -119,7 +106,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .redirectUris("http://localhost:4200")
                 .and()
                 .withClient("pattern-pedia-public")
-//                .secret(passwordEncoder.encode("pattern-pedia-secret-public"))
                 .secret(passwordEncoder.encode(""))
                 .autoApprove(true)
                 .accessTokenValiditySeconds(accessTokenValiditySeconds)
@@ -148,7 +134,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .userDetailsService(this.userService)
                 .authenticationManager(this.authenticationManager)
                 .tokenStore(tokenStore())
-//                .tokenEnhancer(tokenEnhancer())
                 .authorizationCodeServices(new PkceAuthorizationCodeServices(endpoints.getClientDetailsService(), passwordEncoder))
                 .tokenGranter(tokenGranter(endpoints))
                 .addInterceptor(new HandlerInterceptorAdapter() {
@@ -196,11 +181,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         return new JwtTokenStore(jwtAccessTokenConverter());
     }
 
-//    @Bean
-//    public TokenEnhancer tokenEnhancer() {
-//        return new CustomTokenEnhancer();
-//    }
-
     @Bean
     public KeyPair keyPair() {
         ClassPathResource ksFile = new ClassPathResource(KEY_STORE_FILE);
@@ -221,13 +201,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
 
-//        JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
-//        jwtAccessTokenConverter.setKeyPair(keyPair());
-//        jwtAccessTokenConverter.setSigningKey("key");
-
         Map<String, String> customHeaders = Collections.singletonMap("kid", JWK_KID);
         return new  JwtCustomHeadersAccessTokenConverter(customHeaders, keyPair());
-//        return jwtAccessTokenConverter;
     }
 
     @Bean
@@ -238,7 +213,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         tokenServices.setTokenStore(this.tokenStore());
         tokenServices.setClientDetailsService(clientDetailsService);
         tokenServices.setAuthenticationManager(this.authenticationManager);
-//        tokenServices.setTokenEnhancer(tokenEnhancer());
         return tokenServices;
     }
 
@@ -247,8 +221,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         security
                 .tokenKeyAccess("permitAll()")
                 .checkTokenAccess("isAuthenticated()")
-//                .checkTokenAccess("permitAll()")
-//                .checkTokenAccess("hasAuthority('MEMBER')")
                 .allowFormAuthenticationForClients();
 
     }

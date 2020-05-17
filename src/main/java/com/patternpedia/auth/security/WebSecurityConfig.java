@@ -39,7 +39,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private UserDetailsService userDetailsService;
 
-    //    public WebSecurityConfig(CustomAuthenticationEntryPoint customAuthenticationEntryPoint,
     public WebSecurityConfig(@Qualifier("userService") UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
@@ -80,33 +79,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     protected void configure(HttpSecurity http) throws Exception {
-//        http.csrf().disable();
         http
-//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and()
                 .formLogin().loginPage("/login").permitAll()
-//                .successHandler(myAuthenticationSuccessHandler())
-//                .formLogin().permitAll()
                 .and()
                 .requestMatchers()
-//                .antMatchers(HttpMethod.DELETE, "/oauth/token")
-//                .antMatchers("/login", "/oauth/authorize", "/create")
                 .antMatchers("/login", "/oauth/authorize", "/oauth/token", "/signup", "/create", "/login.css")
                 .mvcMatchers("/.well-known/jwks.json")
-
-
                 .and()
-//                .authorizeRequests().antMatchers("/oauth/check_token").permitAll()
-//                .and()
                 .authorizeRequests()
                 .mvcMatchers("/.well-known/jwks.json").permitAll()
                 .antMatchers("/oauth/token").permitAll()
                 .antMatchers( "/signup", "/create").permitAll()
                 .antMatchers("/login.css").permitAll()
                 .anyRequest().authenticated();
-//                .anyRequest().permitAll();
-
-
-        //"/alive", "/userinfo"
     }
 }

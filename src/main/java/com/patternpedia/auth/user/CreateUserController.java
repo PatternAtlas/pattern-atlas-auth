@@ -13,10 +13,6 @@ import java.util.List;
 public class CreateUserController {
     private final UserRepository repository;
 
-//    CreateUserController(UserRepository userRepository) {
-//        this.repository = userRepository;
-//    }
-
     private final PasswordEncoder passwordEncoder;
 
     public CreateUserController(UserRepository repository, PasswordEncoder passwordEncoder) {
@@ -32,11 +28,5 @@ public class CreateUserController {
         return "redirect:/login";
 
     }
-//
-//    @PostMapping("/validateEmail")
-//    Boolean emailExists(@RequestParam String email) {
-//        return repository.existsByEmail(email);
-//    }
-
 }
 

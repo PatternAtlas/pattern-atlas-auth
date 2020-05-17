@@ -35,11 +35,9 @@ public class JwtCustomHeadersAccessTokenConverter extends JwtAccessTokenConverte
     public OAuth2AccessToken enhance(OAuth2AccessToken accessToken,
                                      OAuth2Authentication authentication) {
 
-//        PatternPediaUser user = (PatternPediaUser) authentication.getPrincipal();
         Map<String, Object> info = new LinkedHashMap<String, Object>(
                 accessToken.getAdditionalInformation());
 
-//        info.put("user_id", user.getId());
         info.put("iss", "pattern-pedia");
         info.put("sub", "PatternPediaApi Access");
 
@@ -48,8 +46,6 @@ public class JwtCustomHeadersAccessTokenConverter extends JwtAccessTokenConverte
 
         accessToken = super.enhance(accessToken, authentication);
         ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(new HashMap<>());
-//        DefaultOAuth2AccessToken customAccessToken = new DefaultOAuth2AccessToken(accessToken);
-//        customAccessToken.setAdditionalInformation(info);
         return accessToken;
 
     }
