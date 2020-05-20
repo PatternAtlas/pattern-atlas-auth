@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.patternpedia.auth.user.PatternPediaUser;
+import com.nimbusds.jwt.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.jwt.JwtHelper;
 import org.springframework.security.jwt.crypto.sign.RsaSigner;

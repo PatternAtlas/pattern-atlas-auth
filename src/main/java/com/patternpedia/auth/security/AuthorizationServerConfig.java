@@ -6,6 +6,7 @@ import com.nimbusds.jose.jwk.KeyUse;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.patternpedia.auth.pkce.PkceAuthorizationCodeServices;
 import com.patternpedia.auth.pkce.PkceAuthorizationCodeTokenGranter;
+import com.patternpedia.auth.user.CreateUserController;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,6 +69,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final UserDetailsService userService;
+    private final CreateUserController createUserController;
 
     private static final String KEY_STORE_FILE = "pattern-pedia-jwt.jks";
     private static final String KEY_STORE_PASSWORD = "pattern-pedia-pass";
@@ -84,16 +86,16 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private int refreshTokenValiditySeconds;
 
     public AuthorizationServerConfig(final AuthenticationManager authenticationManager, final PasswordEncoder passwordEncoder,
-                                     final UserDetailsService userService) {
+                                     final UserDetailsService userService, final CreateUserController createUserController) {
 
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
+        this.createUserController = createUserController;
     }
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        logger.info(clients.toString());
         clients.inMemory()
                 .withClient("pattern-pedia-private")
                 .secret(passwordEncoder.encode("pattern-pedia-secret"))
