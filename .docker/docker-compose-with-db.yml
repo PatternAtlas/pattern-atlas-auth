@@ -17,11 +17,11 @@ services:
       JDBC_DATABASE_USERNAME: postgres
       JDBC_DATABASE_PASSWORD: postgres
     ports:
-      - "8081:8081"
+    - "8081:8081"
     networks:
-      - default
-        depends_on:
-        - db
+    - default
+    depends_on:
+    - db
     restart: on-failure
 networks:
   default:
