@@ -55,7 +55,6 @@ public class JwtCustomHeadersAccessTokenConverter extends JwtAccessTokenConverte
         String content;
         try {
             content = this.objectMapper.formatMap(getAccessTokenConverter().convertAccessToken(accessToken, authentication));
-            log.info(content);
         } catch (Exception ex) {
             throw new IllegalStateException("Cannot convert access token to JSON", ex);
         }
