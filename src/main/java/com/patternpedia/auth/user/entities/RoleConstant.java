@@ -6,4 +6,5 @@ public interface RoleConstant {
     String EXPERT       = "EXPERT";
     String LIBRARIAN    = "LIBRARIAN";
     String ADMIN        = "ADMIN";
+    String DEVELOPER    = "DEVELOPER";
 }

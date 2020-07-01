@@ -103,7 +103,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .accessTokenValiditySeconds(accessTokenValiditySeconds)
                 .refreshTokenValiditySeconds(refreshTokenValiditySeconds)
                 .authorizedGrantTypes(authorizedGrantTypes)
-                .scopes("read", "write")
+                .scopes("read", "write", "delete")
                 .resourceIds("pattern-pedia-api")
                 .redirectUris("http://localhost:4200")
                 .and()
@@ -113,7 +113,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .accessTokenValiditySeconds(accessTokenValiditySeconds)
                 .refreshTokenValiditySeconds(refreshTokenValiditySeconds)
                 .authorizedGrantTypes(authorizedGrantTypes)
-                .scopes("read", "write")
+                .scopes("read", "write", "delete")
                 .resourceIds("pattern-pedia-api")
                 .redirectUris("http://localhost:4200")
                 .and()
@@ -123,7 +123,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .accessTokenValiditySeconds(accessTokenValiditySeconds)
                 .refreshTokenValiditySeconds(refreshTokenValiditySeconds)
                 .authorizedGrantTypes(authorizedGrantTypes)
-                .scopes("read", "write")
+                .scopes("read", "write", "delete")
                 .resourceIds("user/**")
                 .redirectUris("http://localhost:4200");
     }
