@@ -16,6 +16,7 @@ public class Role {
     @GeneratedValue(generator = "pg-uuid")
     private UUID id;
 
+    @Column(unique = true)
     private String name;
 
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
