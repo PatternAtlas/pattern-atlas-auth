@@ -13,9 +13,14 @@ public enum CodeChallengeMethod {
         @Override
         public String transform(String codeVerifier) {
             try {
-                MessageDigest digest = MessageDigest.getInstance("SHA-256");
-                byte[] hash = digest.digest(codeVerifier.getBytes(StandardCharsets.UTF_8));
-                return Base64.getUrlEncoder().encodeToString(Hex.encode(hash));
+//                MessageDigest digest = MessageDigest.getInstance("SHA-256");
+//                byte[] hash = digest.digest(codeVerifier.getBytes(StandardCharsets.UTF_8));
+//                return Base64.getUrlEncoder().encodeToString(Hex.encode(hash));
+                byte[] bytes = codeVerifier.getBytes(StandardCharsets.US_ASCII);
+                MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+                messageDigest.update(bytes, 0, bytes.length);
+                byte[] digest = messageDigest.digest();
+                return Base64.getUrlEncoder().withoutPadding().encodeToString(digest);
             } catch (NoSuchAlgorithmException e) {
                 throw new IllegalStateException(e);
             }
@@ -33,6 +38,7 @@ public enum CodeChallengeMethod {
             throw new UnsupportedOperationException();
         }
     };
+
 
     public abstract String transform(String codeVerifier);
 }

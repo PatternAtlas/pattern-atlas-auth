@@ -124,7 +124,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .refreshTokenValiditySeconds(refreshTokenValiditySeconds)
                 .authorizedGrantTypes(authorizedGrantTypes)
                 .scopes("read", "write", "delete")
-                .resourceIds("user/**")
+                .resourceIds("pattern-pedia-api")
                 .redirectUris("http://localhost:4200");
     }
 

@@ -2,7 +2,9 @@ package com.patternpedia.auth.user.entities;
 
 public interface RoleConstant {
     String MEMBER       = "MEMBER";
-//    String AUTHOR       = "AUTHOR";
+    String HELPER       = "HELPER";
+    String MAINTAINER   = "MAINTAINER";
+    String OWNER        = "OWNER";
     String EXPERT       = "EXPERT";
     String LIBRARIAN    = "LIBRARIAN";
     String ADMIN        = "ADMIN";
