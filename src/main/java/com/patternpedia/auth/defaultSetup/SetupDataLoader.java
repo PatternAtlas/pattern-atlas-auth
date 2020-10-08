@@ -140,7 +140,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         ));
         createRoleIfNotFound(RoleConstant.EXPERT, Arrays.asList(
                 //ISSUES
-                readIssuePrivilege, createIssuePrivilege, updateIssuePrivilege, deleteIssuePrivilege, readIssuePrivilegeAll, updateIssuePrivilegeAll, deleteIssuePrivilegeAll,
+                readIssuePrivilege, createIssuePrivilege, updateIssuePrivilege, deleteIssuePrivilege, readIssuePrivilegeAll, updateIssuePrivilegeAll, deleteIssuePrivilegeAll, toPatternCandidate,
                 //CANDIDATE
                 readCandidatePrivilege, createCandidatePrivilege, updateCandidatePrivilege, deleteCandidatePrivilege, readCandidatePrivilegeAll, updateCandidatePrivilegeAll, deleteCandidatePrivilegeAll,
                 //PATTERN
@@ -180,8 +180,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         createUser(new UserEntity("EXPERT", "expert@mail", passwordEncoder.encode("pass"), roleRepository.findByName(RoleConstant.EXPERT)));
         createUser(new UserEntity("LIBRARIAN", "librarian@mail", passwordEncoder.encode("pass"), roleRepository.findByName(RoleConstant.LIBRARIAN)));
         createUser(new UserEntity("ADMIN", "admin@mail", passwordEncoder.encode("pass"), roleRepository.findByName(RoleConstant.ADMIN)));
-//        createUser(new UserEntity("DEVELOPER", "developer@mail", passwordEncoder.encode("pass"), roleRepository.findByName(RoleConstant.DEVELOPER)));
-
 
         alreadySetup = true;
     }
