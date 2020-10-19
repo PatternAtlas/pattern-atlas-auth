@@ -4,8 +4,8 @@ services:
     image: patternpedia/auth:latest
     environment:
       JDBC_DATABASE_URL: db
-      JDBC_DATABASE_USERNAME: postgres
-      JDBC_DATABASE_PASSWORD: postgres
+      JDBC_DATABASE_USERNAME: patternpedia
+      JDBC_DATABASE_PASSWORD: patternpedia
     ports:
     - "8081:8081"
     networks:
