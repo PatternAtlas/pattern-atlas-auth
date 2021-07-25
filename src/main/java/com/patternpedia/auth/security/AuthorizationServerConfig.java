@@ -105,7 +105,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .authorizedGrantTypes(authorizedGrantTypes)
                 .scopes("read", "write", "delete")
                 .resourceIds("pattern-pedia-api")
-                .redirectUris("http://localhost:4200")
+                .redirectUris("http://localhost:1978")
                 .and()
                 .withClient("pattern-pedia-public")
                 .secret(passwordEncoder.encode(""))
@@ -115,7 +115,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .authorizedGrantTypes(authorizedGrantTypes)
                 .scopes("read", "write", "delete")
                 .resourceIds("pattern-pedia-api")
-                .redirectUris("http://localhost:4200")
+                .redirectUris("http://localhost:1978")
                 .and()
                 .withClient("pattern-pedia-pkce")
                 .secret(passwordEncoder.encode(""))
@@ -125,7 +125,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .authorizedGrantTypes(authorizedGrantTypes)
                 .scopes("read", "write", "delete")
                 .resourceIds("pattern-pedia-api")
-                .redirectUris("http://localhost:4200");
+                .redirectUris("http://localhost:1978");
     }
 
     //
