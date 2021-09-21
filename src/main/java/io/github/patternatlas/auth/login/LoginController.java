@@ -1,4 +1,4 @@
-package com.patternpedia.auth.login;
+package io.github.patternatlas.auth.login;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;

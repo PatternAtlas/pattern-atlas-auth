@@ -1,10 +1,10 @@
-package com.patternpedia.auth.security;
+package io.github.patternatlas.auth.security;
 
-import com.patternpedia.auth.user.entities.Privilege;
-import com.patternpedia.auth.user.entities.Role;
-import com.patternpedia.auth.user.entities.UserEntity;
-import com.patternpedia.auth.user.repositories.RoleRepository;
-import com.patternpedia.auth.user.repositories.UserRepository;
+import io.github.patternatlas.auth.user.entities.Privilege;
+import io.github.patternatlas.auth.user.entities.Role;
+import io.github.patternatlas.auth.user.entities.UserEntity;
+import io.github.patternatlas.auth.user.repositories.RoleRepository;
+import io.github.patternatlas.auth.user.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

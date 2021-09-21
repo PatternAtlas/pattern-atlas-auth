@@ -1,4 +1,4 @@
-package com.patternpedia.auth.pkce;
+package io.github.patternatlas.auth.pkce;
 
 import org.bouncycastle.util.encoders.Hex;
 

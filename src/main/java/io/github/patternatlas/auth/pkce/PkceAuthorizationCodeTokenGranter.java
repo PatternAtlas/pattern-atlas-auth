@@ -1,4 +1,4 @@
-package com.patternpedia.auth.pkce;
+package io.github.patternatlas.auth.pkce;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.common.exceptions.InvalidClientException;

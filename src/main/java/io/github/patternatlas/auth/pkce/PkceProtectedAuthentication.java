@@ -1,4 +1,4 @@
-package com.patternpedia.auth.pkce;
+package io.github.patternatlas.auth.pkce;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package com.patternpedia.auth.security;
+package io.github.patternatlas.auth.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

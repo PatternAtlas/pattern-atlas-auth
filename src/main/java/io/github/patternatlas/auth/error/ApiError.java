@@ -1,4 +1,4 @@
-package com.patternpedia.auth.error;
+package io.github.patternatlas.auth.error;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;

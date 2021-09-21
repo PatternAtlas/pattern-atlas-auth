@@ -1,12 +1,12 @@
-package com.patternpedia.auth.security;
+package io.github.patternatlas.auth.security;
 
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.KeyUse;
 import com.nimbusds.jose.jwk.RSAKey;
-import com.patternpedia.auth.pkce.PkceAuthorizationCodeServices;
-import com.patternpedia.auth.pkce.PkceAuthorizationCodeTokenGranter;
-import com.patternpedia.auth.user.CreateUserController;
+import io.github.patternatlas.auth.pkce.PkceAuthorizationCodeServices;
+import io.github.patternatlas.auth.pkce.PkceAuthorizationCodeTokenGranter;
+import io.github.patternatlas.auth.user.CreateUserController;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,7 +71,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private final UserDetailsService userService;
     private final CreateUserController createUserController;
 
-    private static final String KEY_STORE_FILE = "pattern-pedia-jwt.jks";
+    private static final String KEY_STORE_FILE = "pattern-atlas-jwt.jks";
     private static final String KEY_STORE_PASSWORD = "pattern-pedia-pass";
     private static final String KEY_ALIAS = "pattern-pedia-oauth-jwt";
     private static final String JWK_KID = "pattern-pedia-key-id";

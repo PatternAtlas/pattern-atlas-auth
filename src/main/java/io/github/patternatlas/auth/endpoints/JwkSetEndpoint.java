@@ -1,4 +1,4 @@
-package com.patternpedia.auth.endpoints;
+package io.github.patternatlas.auth.endpoints;
 
 import com.nimbusds.jose.jwk.JWKSet;
 import org.springframework.beans.factory.annotation.Autowired;

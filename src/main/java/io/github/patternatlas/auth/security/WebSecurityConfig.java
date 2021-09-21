@@ -1,4 +1,4 @@
-package com.patternpedia.auth.security;
+package io.github.patternatlas.auth.security;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;

@@ -1,7 +1,7 @@
 FROM maven:3-jdk-8 as builder
 
-COPY . /tmp/pattern-pedia-auth
-WORKDIR /tmp/pattern-pedia-auth
+COPY . /tmp/pattern-atlas-auth
+WORKDIR /tmp/pattern-atlas-auth
 RUN mvn package -DskipTests
 
 
@@ -21,7 +21,7 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
     && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
 EXPOSE ${AUTH_PORT}
-COPY --from=builder /tmp/pattern-pedia-auth/target/auth-0.0.1-SNAPSHOT.jar /var/www/java/auth.jar
+COPY --from=builder /tmp/pattern-atlas-auth/target/auth-0.0.1-SNAPSHOT.jar /var/www/java/auth.jar
 
 ADD .docker/application.properties.tpl /var/www/java/application.properties.tpl
 

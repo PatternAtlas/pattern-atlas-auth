@@ -1,6 +1,6 @@
-package com.patternpedia.auth;
+package io.github.patternatlas.auth;
 
-import com.patternpedia.auth.user.CreateUserController;
+import io.github.patternatlas.auth.user.CreateUserController;
 import com.vladmihalcea.hibernate.type.util.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;

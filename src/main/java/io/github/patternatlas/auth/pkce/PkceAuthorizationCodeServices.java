@@ -1,4 +1,4 @@
-package com.patternpedia.auth.pkce;
+package io.github.patternatlas.auth.pkce;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;

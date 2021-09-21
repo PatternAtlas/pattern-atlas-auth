@@ -1,4 +1,4 @@
-package com.patternpedia.auth.error;
+package io.github.patternatlas.auth.error;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;

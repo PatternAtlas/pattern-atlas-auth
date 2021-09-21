@@ -1,9 +1,9 @@
-package com.patternpedia.auth.defaultSetup;
+package io.github.patternatlas.auth.defaultSetup;
 
-import com.patternpedia.auth.user.entities.*;
-import com.patternpedia.auth.user.repositories.PrivilegeRepository;
-import com.patternpedia.auth.user.repositories.RoleRepository;
-import com.patternpedia.auth.user.repositories.UserRepository;
+import io.github.patternatlas.auth.user.entities.*;
+import io.github.patternatlas.auth.user.repositories.PrivilegeRepository;
+import io.github.patternatlas.auth.user.repositories.RoleRepository;
+import io.github.patternatlas.auth.user.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

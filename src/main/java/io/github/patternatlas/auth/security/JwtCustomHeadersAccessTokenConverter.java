@@ -1,4 +1,4 @@
-package com.patternpedia.auth.security;
+package io.github.patternatlas.auth.security;
 
 import java.security.KeyPair;
 import java.security.interfaces.RSAPrivateKey;
@@ -39,7 +39,7 @@ public class JwtCustomHeadersAccessTokenConverter extends JwtAccessTokenConverte
                 accessToken.getAdditionalInformation());
 
         info.put("iss", "pattern-pedia");
-        info.put("sub", "PatternPediaApi Access");
+        info.put("sub", "PatternAtlasApi Access");
 
         ((DefaultOAuth2AccessToken) accessToken)
                 .setAdditionalInformation(info);

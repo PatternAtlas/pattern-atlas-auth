@@ -1,8 +1,8 @@
-package com.patternpedia.auth.endpoints;
+package io.github.patternatlas.auth.endpoints;
 
 
-import com.patternpedia.auth.user.entities.UserEntity;
-import com.patternpedia.auth.user.repositories.UserRepository;
+import io.github.patternatlas.auth.user.entities.UserEntity;
+import io.github.patternatlas.auth.user.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
