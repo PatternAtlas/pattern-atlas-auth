@@ -1,9 +1,9 @@
-package com.patternpedia.auth.user;
+package io.github.patternatlas.auth.user;
 
-import com.patternpedia.auth.user.entities.RoleConstant;
-import com.patternpedia.auth.user.entities.UserEntity;
-import com.patternpedia.auth.user.repositories.RoleRepository;
-import com.patternpedia.auth.user.repositories.UserRepository;
+import io.github.patternatlas.auth.user.entities.RoleConstant;
+import io.github.patternatlas.auth.user.entities.UserEntity;
+import io.github.patternatlas.auth.user.repositories.RoleRepository;
+import io.github.patternatlas.auth.user.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;

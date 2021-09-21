@@ -1,4 +1,4 @@
-package com.patternpedia.auth.user.entities;
+package io.github.patternatlas.auth.user.entities;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

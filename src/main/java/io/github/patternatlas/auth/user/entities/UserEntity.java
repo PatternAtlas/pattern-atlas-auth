@@ -1,7 +1,7 @@
-package com.patternpedia.auth.user.entities;
+package io.github.patternatlas.auth.user.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.patternpedia.auth.user.entities.Role;
+import io.github.patternatlas.auth.user.entities.Role;
 import com.sun.istack.NotNull;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 import lombok.Data;

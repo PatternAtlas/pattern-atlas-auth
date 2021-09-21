@@ -1,4 +1,4 @@
-package com.patternpedia.auth.user.entities;
+package io.github.patternatlas.auth.user.entities;
 
 public interface PrivilegeConstant {
     /** ISSUE */

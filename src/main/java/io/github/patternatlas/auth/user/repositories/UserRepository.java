@@ -1,6 +1,6 @@
-package com.patternpedia.auth.user.repositories;
+package io.github.patternatlas.auth.user.repositories;
 
-import com.patternpedia.auth.user.entities.UserEntity;
+import io.github.patternatlas.auth.user.entities.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
