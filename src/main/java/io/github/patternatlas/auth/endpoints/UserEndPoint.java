@@ -27,7 +27,7 @@ public class UserEndPoint {
 
     @RequestMapping(method = RequestMethod.GET, value = "/user_info")
     @ResponseBody
-    public Map<String, Object> user(@AuthenticationPrincipal Principal principal) {
+    public Map<String, Object> user(Principal principal) {
         if (principal != null) {
             UUID id = UUID.fromString(principal.getName());
             UserEntity user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found: " + principal.getName()));
