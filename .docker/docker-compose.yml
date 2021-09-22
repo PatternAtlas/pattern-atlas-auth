@@ -1,7 +1,7 @@
 version: '3'
 services:
-  pattern-pedia-auth:
-    image: patternpedia/auth:latest
+  pattern-atlas-auth:
+    image: patternatlas/auth:latest
     environment:
       JDBC_DATABASE_URL: db
       JDBC_DATABASE_USERNAME: postgres
