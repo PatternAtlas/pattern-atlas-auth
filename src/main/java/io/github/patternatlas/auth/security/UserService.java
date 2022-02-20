@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -47,10 +48,16 @@ public class UserService implements UserDetailsService {
             logger.info("E-mail login");
             user = userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
         }
-        return new org.springframework.security.core.userdetails.User(user.getId().toString(), user.getPassword(), getAuthorities(user.getRole()));
+        return new org.springframework.security.core.userdetails.User(user.getId().toString(), user.getPassword(), getAuthorities(user.getRoles()));
     }
 
-    private Collection<? extends GrantedAuthority> getAuthorities(Role role) {
-        return role.getPrivileges().stream().map(privilege -> new SimpleGrantedAuthority(privilege.getName())).collect(Collectors.toList());
+    private Collection<? extends GrantedAuthority> getAuthorities(Collection<Role> roles) {
+        List<GrantedAuthority> auths = new ArrayList<GrantedAuthority>();
+        for (Role role : roles) {
+            for (Privilege privilege : role.getPrivileges()) {
+                auths.add(new SimpleGrantedAuthority(privilege.getName()));
+            }
+        }
+        return auths;
     }
 }

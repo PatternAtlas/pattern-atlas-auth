@@ -9,6 +9,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+
 @Slf4j
 @Controller
 public class CreateUserController {
@@ -31,7 +33,7 @@ public class CreateUserController {
     @PostMapping(value = "/create")
     public final String create(@RequestParam String name, @RequestParam String email, @RequestParam String password) {
         log.info("create user");
-        UserEntity user = new UserEntity(name, email, passwordEncoder.encode(password), this.roleRepository.findByName(RoleConstant.MEMBER));
+        UserEntity user = new UserEntity(name, email, passwordEncoder.encode(password), Arrays.asList(this.roleRepository.findByName(RoleConstant.MEMBER)));
         userRepository.save(user);
         return "redirect:/login";
 

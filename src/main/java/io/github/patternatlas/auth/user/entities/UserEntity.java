@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.Collection;
 
 @Entity
 @Data
@@ -29,8 +30,13 @@ public class UserEntity implements Serializable {
 
     @JsonIgnore
     @ToString.Exclude
-    @ManyToOne()
-    private Role role;
+    @ManyToMany()
+    @JoinTable(
+        name = "user_entity_roles",
+        joinColumns = { @JoinColumn(name = "users_id") },
+        inverseJoinColumns = { @JoinColumn(name = "roles_id") }
+    )
+    private Collection<Role> roles;
 
     @NaturalId(mutable = true)
     @Column(nullable = false, unique = true)
@@ -44,11 +50,11 @@ public class UserEntity implements Serializable {
     @Column(nullable = false)
     private String password;
 
-    public UserEntity(String name, String email, String password, Role role) {
+    public UserEntity(String name, String email, String password, Collection<Role> roles) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.role = role;
+        this.roles = roles;
     }
 
 }

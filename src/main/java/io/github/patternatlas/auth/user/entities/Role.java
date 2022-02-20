@@ -19,7 +19,7 @@ public class Role {
     @Column(unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToMany(mappedBy = "roles", cascade = CascadeType.ALL)
     private Collection<UserEntity> users;
 
     @ManyToMany(cascade = CascadeType.ALL)

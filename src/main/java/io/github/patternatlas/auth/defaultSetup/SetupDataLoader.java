@@ -4,6 +4,8 @@ import io.github.patternatlas.auth.user.entities.*;
 import io.github.patternatlas.auth.user.repositories.PrivilegeRepository;
 import io.github.patternatlas.auth.user.repositories.RoleRepository;
 import io.github.patternatlas.auth.user.repositories.UserRepository;
+import io.github.patternatlas.auth.pattern.repositories.PatternLanguageRepository;
+import io.github.patternatlas.auth.pattern.repositories.PatternRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,12 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     private PrivilegeRepository privilegeRepository;
 
     @Autowired
+    private PatternLanguageRepository patternLanguageRepository;
+
+    @Autowired
+    private PatternRepository patternRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Override
@@ -39,11 +47,18 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
 
         this.userRepository.findAll().stream().forEach(user -> logger.info(user.getEmail()));
-
-        if(this.userRepository.findByEmail("admin@mail").isPresent()) {
-            logger.info("admin@mail already exists");
-            return;
-        }
+        /** PATTERN LANGUAGE */
+        /*this.patternLanguageRepository.findAll().stream().forEach(patternLanguage -> {
+            createPrivilegeIfNotFound("PATTERN_LANGUAGE_READ_" + patternLanguage.getId().toString());
+            createPrivilegeIfNotFound("PATTERN_LANGUAGE_EDIT_" + patternLanguage.getId().toString());
+            createPrivilegeIfNotFound("PATTERN_LANGUAGE_DELETE_" + patternLanguage.getId().toString());
+        });*/
+        /** PATTERN */
+        /*this.patternRepository.findAll().stream().forEach(pattern -> {
+            createPrivilegeIfNotFound("APPROVED_PATTERN_READ_" + pattern.getId().toString());
+            createPrivilegeIfNotFound("APPROVED_PATTERN_EDIT_" + pattern.getId().toString());
+            createPrivilegeIfNotFound("APPROVED_PATTERN_DELETE_" + pattern.getId().toString());
+        });*/
 
         if (alreadySetup)
             return;
@@ -51,28 +66,50 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         /** Privileges */
         /** ISSUE */
         Privilege readIssuePrivilege = createPrivilegeIfNotFound(PrivilegeConstant.ISSUE_READ);
-        Privilege createIssuePrivilege = createPrivilegeIfNotFound(PrivilegeConstant.ISSUE_CREATE);
         Privilege updateIssuePrivilege = createPrivilegeIfNotFound(PrivilegeConstant.ISSUE_EDIT);
         Privilege deleteIssuePrivilege = createPrivilegeIfNotFound(PrivilegeConstant.ISSUE_DELETE);
+        Privilege commentIssuePrivilege = createPrivilegeIfNotFound(PrivilegeConstant.ISSUE_COMMENT);
+        Privilege voteIssuePrivilege = createPrivilegeIfNotFound(PrivilegeConstant.ISSUE_VOTE);
+        Privilege evidenceIssuePrivilege = createPrivilegeIfNotFound(PrivilegeConstant.ISSUE_EVIDENCE);
+        Privilege toPatternCandidate = createPrivilegeIfNotFound(PrivilegeConstant.ISSUE_TO_PATTERN_CANDIDATE);
+        Privilege createIssuePrivilege = createPrivilegeIfNotFound(PrivilegeConstant.ISSUE_CREATE);
         Privilege readIssuePrivilegeAll = createPrivilegeIfNotFound(PrivilegeConstant.ISSUE_READ_ALL);
         Privilege updateIssuePrivilegeAll = createPrivilegeIfNotFound(PrivilegeConstant.ISSUE_EDIT_ALL);
         Privilege deleteIssuePrivilegeAll = createPrivilegeIfNotFound(PrivilegeConstant.ISSUE_DELETE_ALL);
-        Privilege toPatternCandidate = createPrivilegeIfNotFound(PrivilegeConstant.ISSUE_TO_PATTERN_CANDIDATE);
+        Privilege commentIssuePrivilegeAll = createPrivilegeIfNotFound(PrivilegeConstant.ISSUE_COMMENT_ALL);
+        Privilege voteIssuePrivilegeAll = createPrivilegeIfNotFound(PrivilegeConstant.ISSUE_VOTE_ALL);
+        Privilege evidenceIssuePrivilegeAll = createPrivilegeIfNotFound(PrivilegeConstant.ISSUE_EVIDENCE_ALL);
+        Privilege toPatternCandidateAll = createPrivilegeIfNotFound(PrivilegeConstant.ISSUE_TO_PATTERN_CANDIDATE_ALL);
         /** CANDIDATE */
         Privilege readCandidatePrivilege = createPrivilegeIfNotFound(PrivilegeConstant.PATTERN_CANDIDATE_READ);
-        Privilege createCandidatePrivilege = createPrivilegeIfNotFound(PrivilegeConstant.PATTERN_CANDIDATE_CREATE);
         Privilege updateCandidatePrivilege = createPrivilegeIfNotFound(PrivilegeConstant.PATTERN_CANDIDATE_EDIT);
         Privilege deleteCandidatePrivilege = createPrivilegeIfNotFound(PrivilegeConstant.PATTERN_CANDIDATE_DELETE);
+        Privilege commentCandidatePrivilege = createPrivilegeIfNotFound(PrivilegeConstant.PATTERN_CANDIDATE_COMMENT);
+        Privilege voteCandidatePrivilege = createPrivilegeIfNotFound(PrivilegeConstant.PATTERN_CANDIDATE_VOTE);
+        Privilege evidenceCandidatePrivilege = createPrivilegeIfNotFound(PrivilegeConstant.PATTERN_CANDIDATE_EVIDENCE);
+        Privilege toApprovedPattern = createPrivilegeIfNotFound(PrivilegeConstant.PATTERN_CANDIDATE_TO_PATTERN);
+        Privilege createCandidatePrivilege = createPrivilegeIfNotFound(PrivilegeConstant.PATTERN_CANDIDATE_CREATE);
         Privilege readCandidatePrivilegeAll = createPrivilegeIfNotFound(PrivilegeConstant.PATTERN_CANDIDATE_READ_ALL);
         Privilege updateCandidatePrivilegeAll = createPrivilegeIfNotFound(PrivilegeConstant.PATTERN_CANDIDATE_EDIT_ALL);
         Privilege deleteCandidatePrivilegeAll = createPrivilegeIfNotFound(PrivilegeConstant.PATTERN_CANDIDATE_DELETE_ALL);
-        Privilege toApprovedPattern = createPrivilegeIfNotFound(PrivilegeConstant.PATTERN_CANDIDATE_TO_PATTERN);
+        Privilege commentCandidatePrivilegeAll = createPrivilegeIfNotFound(PrivilegeConstant.PATTERN_CANDIDATE_COMMENT_ALL);
+        Privilege voteCandidatePrivilegeAll = createPrivilegeIfNotFound(PrivilegeConstant.PATTERN_CANDIDATE_VOTE_ALL);
+        Privilege evidenceCandidatePrivilegeAll = createPrivilegeIfNotFound(PrivilegeConstant.PATTERN_CANDIDATE_EVIDENCE_ALL);
+        Privilege toApprovedPatternAll = createPrivilegeIfNotFound(PrivilegeConstant.PATTERN_CANDIDATE_TO_PATTERN_ALL);
+        /** Pattern Language*/
+        Privilege readPatternLanguagePrivilege = createPrivilegeIfNotFound(PrivilegeConstant.PATTERN_LANGUAGE_READ);
+        Privilege updatePatternLanguagePrivilege = createPrivilegeIfNotFound(PrivilegeConstant.PATTERN_LANGUAGE_EDIT);
+        Privilege deletePatternLanguagePrivilege = createPrivilegeIfNotFound(PrivilegeConstant.PATTERN_LANGUAGE_DELETE);
+        Privilege createPatternLanguagePrivilege = createPrivilegeIfNotFound(PrivilegeConstant.PATTERN_LANGUAGE_CREATE);
+        Privilege readPatternLanguagePrivilegeAll = createPrivilegeIfNotFound(PrivilegeConstant.PATTERN_LANGUAGE_READ_ALL);
+        Privilege updatePatternLanguagePrivilegeAll = createPrivilegeIfNotFound(PrivilegeConstant.PATTERN_LANGUAGE_EDIT_ALL);
+        Privilege deletePatternLanguagePrivilegeAll = createPrivilegeIfNotFound(PrivilegeConstant.PATTERN_LANGUAGE_DELETE_ALL);
         /** Pattern */
-        Privilege readPatternPrivilege = createPrivilegeIfNotFound(PrivilegeConstant.APPROVED_PATTERN_READ);
-        Privilege createPatternPrivilege = createPrivilegeIfNotFound(PrivilegeConstant.APPROVED_PATTERN_CREATE);
-        Privilege updatePatternPrivilege = createPrivilegeIfNotFound(PrivilegeConstant.APPROVED_PATTERN_EDIT);
-        Privilege deletePatternPrivilege = createPrivilegeIfNotFound(PrivilegeConstant.APPROVED_PATTERN_DELETE);
-        Privilege readPatternPrivilegeAll = createPrivilegeIfNotFound(PrivilegeConstant.APPROVED_PATTERN_READ_ALL);
+        Privilege readPatternPrivilege      = createPrivilegeIfNotFound(PrivilegeConstant.APPROVED_PATTERN_READ);
+        Privilege updatePatternPrivilege    = createPrivilegeIfNotFound(PrivilegeConstant.APPROVED_PATTERN_EDIT);
+        Privilege deletePatternPrivilege    = createPrivilegeIfNotFound(PrivilegeConstant.APPROVED_PATTERN_DELETE);
+        Privilege createPatternPrivilege    = createPrivilegeIfNotFound(PrivilegeConstant.APPROVED_PATTERN_CREATE);
+        Privilege readPatternPrivilegeAll   = createPrivilegeIfNotFound(PrivilegeConstant.APPROVED_PATTERN_READ_ALL);
         Privilege updatePatternPrivilegeAll = createPrivilegeIfNotFound(PrivilegeConstant.APPROVED_PATTERN_EDIT_ALL);
         Privilege deletePatternPrivilegeAll = createPrivilegeIfNotFound(PrivilegeConstant.APPROVED_PATTERN_DELETE_ALL);
         /** USER */
@@ -89,19 +126,37 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Privilege votePrivilege             = createPrivilegeIfNotFound(PrivilegeConstant.VOTE);
         Privilege evidencePrivilege         = createPrivilegeIfNotFound(PrivilegeConstant.EVIDENCE);
 
+        /*this.patternLanguageRepository.findAll().stream().forEach(patternLanguage -> {
+            Privilege readPatternLanguagePrivilegeRes = createPrivilegeIfNotFound(PrivilegeConstant.PATTERN_LANGUAGE_READ + '_' + patternLanguage.getId().toString());
+            Privilege updatePatternLanguagePrivilegeRes = createPrivilegeIfNotFound(PrivilegeConstant.PATTERN_LANGUAGE_EDIT + '_' + patternLanguage.getId().toString());
+            Privilege deletePatternLanguagePrivilegeRes = createPrivilegeIfNotFound(PrivilegeConstant.PATTERN_LANGUAGE_DELETE + '_' + patternLanguage.getId().toString());
+            createRoleIfNotFound(RoleConstant.HELPER + "_PATTERN_LANGUAGE_" + patternLanguage.getId().toString(), Arrays.asList(
+                readPatternLanguagePrivilegeRes, updatePatternLanguagePrivilegeRes
+            ));
+            createRoleIfNotFound(RoleConstant.MAINTAINER + "_PATTERN_LANGUAGE_" + patternLanguage.getId().toString(), Arrays.asList(
+                readPatternLanguagePrivilegeRes, updatePatternLanguagePrivilegeRes, deletePatternLanguagePrivilegeRes
+            ));
+            createRoleIfNotFound(RoleConstant.OWNER + "_PATTERN_LANGUAGE_" + patternLanguage.getId().toString(), Arrays.asList(
+                readPatternLanguagePrivilegeRes, updatePatternLanguagePrivilegeRes, deletePatternLanguagePrivilegeRes
+            ));
+        });
+
+        this.patternRepository.findAll().stream().forEach(pattern -> {
+            Privilege readPatternPrivilegeRes = createPrivilegeIfNotFound(PrivilegeConstant.APPROVED_PATTERN_READ + '_' + pattern.getId().toString());
+            Privilege updatePatternPrivilegeRes = createPrivilegeIfNotFound(PrivilegeConstant.APPROVED_PATTERN_EDIT + '_' + pattern.getId().toString());
+            Privilege deletePatternPrivilegeRes = createPrivilegeIfNotFound(PrivilegeConstant.APPROVED_PATTERN_DELETE + '_' + pattern.getId().toString());
+            createRoleIfNotFound(RoleConstant.HELPER + "_APPROVED_PATTERN_" + pattern.getId().toString(), Arrays.asList(
+                readPatternPrivilegeRes, updatePatternPrivilegeRes, deletePatternPrivilegeRes
+            ));
+            createRoleIfNotFound(RoleConstant.MAINTAINER + "_APPROVED_PATTERN_" + pattern.getId().toString(), Arrays.asList(
+                readPatternPrivilegeRes, updatePatternPrivilegeRes, deletePatternPrivilegeRes
+            ));
+            createRoleIfNotFound(RoleConstant.OWNER + "_APPROVED_PATTERN_" + pattern.getId().toString(), Arrays.asList(
+                readPatternPrivilegeRes, updatePatternPrivilegeRes, deletePatternPrivilegeRes
+            ));
+        });*/
+
         /** Roles */
-        createRoleIfNotFound(RoleConstant.MEMBER, Arrays.asList(
-                //ISSUES
-                readIssuePrivilege, createIssuePrivilege,
-                //CANDIDATE
-                readCandidatePrivilege,
-                //Pattern,
-                readPatternPrivilege,
-                //USER
-                readUserPrivilege, updateUserPrivilege, deleteUserPrivilege,
-                //GENERAL
-                commentPrivilege, votePrivilege, evidencePrivilege
-        ));
         createRoleIfNotFound(RoleConstant.HELPER, Arrays.asList(
                 //ISSUES
                 readIssuePrivilege, createIssuePrivilege, updateIssuePrivilege,
@@ -138,13 +193,27 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                 //GENERAL
                 commentPrivilege, votePrivilege, evidencePrivilege
         ));
+        createRoleIfNotFound(RoleConstant.MEMBER, Arrays.asList(
+                //ISSUES
+                readIssuePrivilegeAll, createIssuePrivilege,
+                //CANDIDATE
+                readCandidatePrivilegeAll,
+                //Pattern Language,
+                readPatternPrivilegeAll,
+                //Pattern,
+                readPatternPrivilegeAll,
+                //USER
+                readUserPrivilege, updateUserPrivilege, deleteUserPrivilege,
+                //GENERAL
+                commentPrivilege, votePrivilege, evidencePrivilege
+        ));
         createRoleIfNotFound(RoleConstant.EXPERT, Arrays.asList(
                 //ISSUES
-                readIssuePrivilege, createIssuePrivilege, updateIssuePrivilege, deleteIssuePrivilege, readIssuePrivilegeAll, updateIssuePrivilegeAll, deleteIssuePrivilegeAll, toPatternCandidate,
+                createIssuePrivilege, readIssuePrivilegeAll, updateIssuePrivilegeAll, deleteIssuePrivilegeAll, toPatternCandidateAll,
                 //CANDIDATE
-                readCandidatePrivilege, createCandidatePrivilege, updateCandidatePrivilege, deleteCandidatePrivilege, readCandidatePrivilegeAll, updateCandidatePrivilegeAll, deleteCandidatePrivilegeAll,
+                createCandidatePrivilege, readCandidatePrivilegeAll, updateCandidatePrivilegeAll, deleteCandidatePrivilegeAll,
                 //PATTERN
-                readPatternPrivilege, createPatternPrivilege, updatePatternPrivilege, deletePatternPrivilege, readPatternPrivilegeAll, updatePatternPrivilegeAll, deletePatternPrivilegeAll,
+                createPatternPrivilege, readPatternPrivilegeAll, updatePatternPrivilegeAll, deletePatternPrivilegeAll,
                 //USER
                 readUserPrivilege, updateUserPrivilege, deleteUserPrivilege,
                 //GENERAL
@@ -152,34 +221,36 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         ));
         createRoleIfNotFound(RoleConstant.LIBRARIAN, Arrays.asList(
                 //ISSUES
-                readIssuePrivilege, createIssuePrivilege, updateIssuePrivilege, deleteIssuePrivilege, readIssuePrivilegeAll, updateIssuePrivilegeAll, deleteIssuePrivilegeAll,
+                createIssuePrivilege, readIssuePrivilegeAll, updateIssuePrivilegeAll, deleteIssuePrivilegeAll,
                 //CANDIDATE
-                readCandidatePrivilege, createCandidatePrivilege, updateCandidatePrivilege, deleteCandidatePrivilege, readCandidatePrivilegeAll, updateCandidatePrivilegeAll, deleteCandidatePrivilegeAll,
+                createCandidatePrivilege, readCandidatePrivilegeAll, updateCandidatePrivilegeAll, deleteCandidatePrivilegeAll,
                 //PATTERN
-                readPatternPrivilege, createPatternPrivilege, updatePatternPrivilege, deletePatternPrivilege, readPatternPrivilegeAll, updatePatternPrivilegeAll, deletePatternPrivilegeAll,
+                createPatternPrivilege, readPatternPrivilegeAll, updatePatternPrivilegeAll, deletePatternPrivilegeAll,
                 //USER
                 readUserPrivilege, createUserPrivilege, updateUserPrivilege, deleteUserPrivilege, readUserPrivilegeAll, updateUserPrivilegeAll, deleteUserPrivilegeAll,
                 //GENERAL
                 commentPrivilege, votePrivilege, evidencePrivilege
         ));
-        createRoleIfNotFound(RoleConstant.ADMIN, Arrays.asList(
+        /*createRoleIfNotFound(RoleConstant.ADMIN, Arrays.asList(
                 //ISSUES
-                readIssuePrivilege, createIssuePrivilege, updateIssuePrivilege, deleteIssuePrivilege, readIssuePrivilegeAll, updateIssuePrivilegeAll, deleteIssuePrivilegeAll,
+                createIssuePrivilege, readIssuePrivilegeAll, updateIssuePrivilegeAll, deleteIssuePrivilegeAll, 
+                commentIssuePrivilegeAll, voteIssuePrivilegeAll, evidenceIssuePrivilegeAll, toPatternCandidateAll,
                 //CANDIDATE
-                readCandidatePrivilege, createCandidatePrivilege, updateCandidatePrivilege, deleteCandidatePrivilege, readCandidatePrivilegeAll, updateCandidatePrivilegeAll, deleteCandidatePrivilegeAll,
+                createCandidatePrivilege, readCandidatePrivilegeAll, updateCandidatePrivilegeAll, deleteCandidatePrivilegeAll,
+                commentCandidatePrivilegeAll, voteCandidatePrivilegeAll, evidenceCandidatePrivilegeAll, toApprovedPatternAll,
                 //PATTERN
-                readPatternPrivilege, createPatternPrivilege, updatePatternPrivilege, deletePatternPrivilege, readPatternPrivilegeAll, updatePatternPrivilegeAll, deletePatternPrivilegeAll,
+                createPatternPrivilege, readPatternPrivilegeAll, updatePatternPrivilegeAll, deletePatternPrivilegeAll,
                 //USER
-                readUserPrivilege, createUserPrivilege, updateUserPrivilege, deleteUserPrivilege, readUserPrivilegeAll, updateUserPrivilegeAll, deleteUserPrivilegeAll, userPrivilegeAll,
+                readUserPrivilege, createUserPrivilege, updateUserPrivilege, deleteUserPrivilege, readUserPrivilegeAll, updateUserPrivilegeAll, deleteUserPrivilegeAll, userPrivilegeAll
                 //GENERAL
-                commentPrivilege, votePrivilege, evidencePrivilege
-        ));
+                //issueCommentPrivilege, votePrivilege, evidencePrivilege
+        ));*/
 
-        createUser(new UserEntity("MEMBER", "member@mail", passwordEncoder.encode("pass"), roleRepository.findByName(RoleConstant.MEMBER)));
-        createUser(new UserEntity("MEMBER_1", "member1@mail", passwordEncoder.encode("pass"), roleRepository.findByName(RoleConstant.MEMBER)));
-        createUser(new UserEntity("EXPERT", "expert@mail", passwordEncoder.encode("pass"), roleRepository.findByName(RoleConstant.EXPERT)));
-        createUser(new UserEntity("LIBRARIAN", "librarian@mail", passwordEncoder.encode("pass"), roleRepository.findByName(RoleConstant.LIBRARIAN)));
-        createUser(new UserEntity("ADMIN", "admin@mail", passwordEncoder.encode("pass"), roleRepository.findByName(RoleConstant.ADMIN)));
+        createUser(new UserEntity("MEMBER", "member@mail", passwordEncoder.encode("pass"), Arrays.asList(roleRepository.findByName(RoleConstant.MEMBER))));
+        createUser(new UserEntity("MEMBER_1", "member1@mail", passwordEncoder.encode("pass"), Arrays.asList(roleRepository.findByName(RoleConstant.MEMBER))));
+        createUser(new UserEntity("EXPERT", "expert@mail", passwordEncoder.encode("pass"), Arrays.asList(roleRepository.findByName(RoleConstant.EXPERT))));
+        createUser(new UserEntity("LIBRARIAN", "librarian@mail", passwordEncoder.encode("pass"), Arrays.asList(roleRepository.findByName(RoleConstant.LIBRARIAN))));
+        //createUser(new UserEntity("ADMIN", "admin@mail", passwordEncoder.encode("pass"), Arrays.asList(roleRepository.findByName(RoleConstant.ADMIN))));
 
         alreadySetup = true;
     }
