@@ -47,6 +47,13 @@ public class UserService implements UserDetailsService {
         } catch (IllegalArgumentException exception){
             logger.info("E-mail login");
             user = userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+            if (user == null) {
+                logger.info("USER NOT FOUND");
+            } else {
+                for (Role role : user.getRoles()) {
+                    logger.info(role.getName());
+                }
+            }
         }
         return new org.springframework.security.core.userdetails.User(user.getId().toString(), user.getPassword(), getAuthorities(user.getRoles()));
     }
