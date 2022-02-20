@@ -31,11 +31,11 @@ public class UserEntity implements Serializable {
     @JsonIgnore
     @ToString.Exclude
     @ManyToMany()
-    @JoinTable(
+    /*@JoinTable(
         name = "user_entity_roles",
         joinColumns = { @JoinColumn(name = "users_id") },
         inverseJoinColumns = { @JoinColumn(name = "roles_id") }
-    )
+    )*/
     private Collection<Role> roles;
 
     @NaturalId(mutable = true)
