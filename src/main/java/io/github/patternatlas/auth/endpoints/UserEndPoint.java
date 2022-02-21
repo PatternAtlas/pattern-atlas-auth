@@ -36,7 +36,7 @@ public class UserEndPoint {
             model.put("name", user.getName());
             model.put("id", user.getId());
             model.put("role", user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList()));
-            model.put("privileges", user.getRoles().stream().map(role -> role.getPrivileges().stream().map(privilege -> privilege.getName()).collect(Collectors.toList())).collect(Collectors.toList()));
+            model.put("privileges", user.getRoles().stream().flatMap(role -> role.getPrivileges().stream()).map(privilege -> privilege.getName()).collect(Collectors.toList()));
             return model;
         }
         return null;
