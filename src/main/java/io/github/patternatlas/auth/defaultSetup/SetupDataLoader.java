@@ -159,7 +159,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         /** Roles */
         createRoleIfNotFound(RoleConstant.HELPER, Arrays.asList(
                 //ISSUES
-                readIssuePrivilege, createIssuePrivilege, updateIssuePrivilege,
+                readIssuePrivilege, updateIssuePrivilege,
                 //CANDIDATE
                 readCandidatePrivilege, updateCandidatePrivilege,
                 //Pattern,
@@ -171,7 +171,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         ));
         createRoleIfNotFound(RoleConstant.MAINTAINER, Arrays.asList(
                 //ISSUES
-                readIssuePrivilege, createIssuePrivilege, updateIssuePrivilege, deleteIssuePrivilege, toPatternCandidate,
+                readIssuePrivilege, updateIssuePrivilege, deleteIssuePrivilege, toPatternCandidate,
                 //CANDIDATE
                 readCandidatePrivilege, updateCandidatePrivilege, deleteCandidatePrivilege, toApprovedPattern,
                 //Pattern,
@@ -183,7 +183,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         ));
         createRoleIfNotFound(RoleConstant.OWNER, Arrays.asList(
                 //ISSUES
-                readIssuePrivilege, createIssuePrivilege, updateIssuePrivilege, deleteIssuePrivilege, toPatternCandidate,
+                readIssuePrivilege, updateIssuePrivilege, deleteIssuePrivilege, toPatternCandidate,
                 //CANDIDATE
                 readCandidatePrivilege, updateCandidatePrivilege, deleteCandidatePrivilege, toApprovedPattern,
                 //Pattern,
