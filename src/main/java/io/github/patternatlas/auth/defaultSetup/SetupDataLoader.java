@@ -121,10 +121,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Privilege updateUserPrivilegeAll    = createPrivilegeIfNotFound(PrivilegeConstant.USER_EDIT_ALL);
         Privilege deleteUserPrivilegeAll    = createPrivilegeIfNotFound(PrivilegeConstant.USER_DELETE_ALL);
         Privilege userPrivilegeAll          = createPrivilegeIfNotFound(PrivilegeConstant.USER_ALL);
-        /** General*/
-        Privilege commentPrivilege          = createPrivilegeIfNotFound(PrivilegeConstant.COMMENT);
-        Privilege votePrivilege             = createPrivilegeIfNotFound(PrivilegeConstant.VOTE);
-        Privilege evidencePrivilege         = createPrivilegeIfNotFound(PrivilegeConstant.EVIDENCE);
 
         /*this.patternLanguageRepository.findAll().stream().forEach(patternLanguage -> {
             Privilege readPatternLanguagePrivilegeRes = createPrivilegeIfNotFound(PrivilegeConstant.PATTERN_LANGUAGE_READ + '_' + patternLanguage.getId().toString());
@@ -159,77 +155,77 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         /** Roles */
         createRoleIfNotFound(RoleConstant.HELPER, Arrays.asList(
                 //ISSUES
-                readIssuePrivilege, createIssuePrivilege, updateIssuePrivilege,
+                readIssuePrivilege, 
+                commentIssuePrivilege, voteIssuePrivilege, evidenceIssuePrivilege,
                 //CANDIDATE
-                readCandidatePrivilege, updateCandidatePrivilege,
+                readCandidatePrivilege, 
+                commentCandidatePrivilege, voteCandidatePrivilege, evidenceCandidatePrivilege,
                 //Pattern,
                 readPatternPrivilege, updatePatternPrivilege,
                 //USER
-                readUserPrivilege, updateUserPrivilege, deleteUserPrivilege,
-                //GENERAL
-                commentPrivilege, votePrivilege, evidencePrivilege
+                readUserPrivilege, updateUserPrivilege, deleteUserPrivilege
         ));
         createRoleIfNotFound(RoleConstant.MAINTAINER, Arrays.asList(
                 //ISSUES
-                readIssuePrivilege, createIssuePrivilege, updateIssuePrivilege, deleteIssuePrivilege, toPatternCandidate,
+                readIssuePrivilege, updateIssuePrivilege, 
+                commentIssuePrivilege, voteIssuePrivilege, evidenceIssuePrivilege,
                 //CANDIDATE
-                readCandidatePrivilege, updateCandidatePrivilege, deleteCandidatePrivilege, toApprovedPattern,
+                readCandidatePrivilege, updateCandidatePrivilege, 
+                commentCandidatePrivilege, voteCandidatePrivilege, evidenceCandidatePrivilege,
                 //Pattern,
                 readPatternPrivilege, updatePatternPrivilege, deletePatternPrivilege,
                 //USER
-                readUserPrivilege, updateUserPrivilege, deleteUserPrivilege,
-                //GENERAL
-                commentPrivilege, votePrivilege, evidencePrivilege
+                readUserPrivilege, updateUserPrivilege, deleteUserPrivilege
         ));
         createRoleIfNotFound(RoleConstant.OWNER, Arrays.asList(
                 //ISSUES
-                readIssuePrivilege, createIssuePrivilege, updateIssuePrivilege, deleteIssuePrivilege, toPatternCandidate,
+                readIssuePrivilege, updateIssuePrivilege, deleteIssuePrivilege, toPatternCandidate, 
+                commentIssuePrivilege, voteIssuePrivilege, evidenceIssuePrivilege,
                 //CANDIDATE
-                readCandidatePrivilege, updateCandidatePrivilege, deleteCandidatePrivilege, toApprovedPattern,
+                readCandidatePrivilege, updateCandidatePrivilege, deleteCandidatePrivilege, toApprovedPattern, 
+                commentCandidatePrivilege, voteCandidatePrivilege, evidenceCandidatePrivilege,
                 //Pattern,
                 readPatternPrivilege, updatePatternPrivilege, deletePatternPrivilege,
                 //USER
-                readUserPrivilege, updateUserPrivilege, deleteUserPrivilege,
-                //GENERAL
-                commentPrivilege, votePrivilege, evidencePrivilege
+                readUserPrivilege, updateUserPrivilege, deleteUserPrivilege
         ));
         createRoleIfNotFound(RoleConstant.MEMBER, Arrays.asList(
                 //ISSUES
-                readIssuePrivilegeAll, createIssuePrivilege,
+                createIssuePrivilege, readIssuePrivilegeAll, 
+                commentIssuePrivilegeAll, voteIssuePrivilegeAll, evidenceIssuePrivilegeAll,
                 //CANDIDATE
-                readCandidatePrivilegeAll,
+                readCandidatePrivilegeAll, 
+                commentCandidatePrivilegeAll, voteCandidatePrivilegeAll, evidenceCandidatePrivilegeAll,
                 //Pattern Language,
                 readPatternPrivilegeAll,
                 //Pattern,
                 readPatternPrivilegeAll,
                 //USER
-                readUserPrivilege, updateUserPrivilege, deleteUserPrivilege,
-                //GENERAL
-                commentPrivilege, votePrivilege, evidencePrivilege
+                readUserPrivilege, updateUserPrivilege, deleteUserPrivilege
         ));
         createRoleIfNotFound(RoleConstant.EXPERT, Arrays.asList(
                 //ISSUES
-                createIssuePrivilege, readIssuePrivilegeAll, updateIssuePrivilegeAll, deleteIssuePrivilegeAll, toPatternCandidateAll,
+                createIssuePrivilege, readIssuePrivilegeAll, updateIssuePrivilegeAll, deleteIssuePrivilegeAll, toPatternCandidateAll, 
+                commentIssuePrivilegeAll, voteIssuePrivilegeAll, evidenceIssuePrivilegeAll,
                 //CANDIDATE
-                createCandidatePrivilege, readCandidatePrivilegeAll, updateCandidatePrivilegeAll, deleteCandidatePrivilegeAll,
+                createCandidatePrivilege, readCandidatePrivilegeAll, updateCandidatePrivilegeAll, deleteCandidatePrivilegeAll, 
+                commentCandidatePrivilegeAll, voteCandidatePrivilegeAll, evidenceCandidatePrivilegeAll,
                 //PATTERN
                 createPatternPrivilege, readPatternPrivilegeAll, updatePatternPrivilegeAll, deletePatternPrivilegeAll,
                 //USER
-                readUserPrivilege, updateUserPrivilege, deleteUserPrivilege,
-                //GENERAL
-                commentPrivilege, votePrivilege, evidencePrivilege
+                readUserPrivilege, updateUserPrivilege, deleteUserPrivilege
         ));
         createRoleIfNotFound(RoleConstant.LIBRARIAN, Arrays.asList(
                 //ISSUES
-                createIssuePrivilege, readIssuePrivilegeAll, updateIssuePrivilegeAll, deleteIssuePrivilegeAll,
+                createIssuePrivilege, readIssuePrivilegeAll, updateIssuePrivilegeAll, deleteIssuePrivilegeAll, 
+                commentIssuePrivilegeAll, voteIssuePrivilegeAll, evidenceIssuePrivilegeAll,
                 //CANDIDATE
-                createCandidatePrivilege, readCandidatePrivilegeAll, updateCandidatePrivilegeAll, deleteCandidatePrivilegeAll,
+                createCandidatePrivilege, readCandidatePrivilegeAll, updateCandidatePrivilegeAll, deleteCandidatePrivilegeAll, 
+                commentCandidatePrivilegeAll, voteCandidatePrivilegeAll, evidenceCandidatePrivilegeAll,
                 //PATTERN
                 createPatternPrivilege, readPatternPrivilegeAll, updatePatternPrivilegeAll, deletePatternPrivilegeAll,
                 //USER
-                readUserPrivilege, createUserPrivilege, updateUserPrivilege, deleteUserPrivilege, readUserPrivilegeAll, updateUserPrivilegeAll, deleteUserPrivilegeAll,
-                //GENERAL
-                commentPrivilege, votePrivilege, evidencePrivilege
+                readUserPrivilege, createUserPrivilege, updateUserPrivilege, deleteUserPrivilege, readUserPrivilegeAll, updateUserPrivilegeAll, deleteUserPrivilegeAll
         ));
         /*createRoleIfNotFound(RoleConstant.ADMIN, Arrays.asList(
                 //ISSUES
@@ -242,8 +238,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                 createPatternPrivilege, readPatternPrivilegeAll, updatePatternPrivilegeAll, deletePatternPrivilegeAll,
                 //USER
                 readUserPrivilege, createUserPrivilege, updateUserPrivilege, deleteUserPrivilege, readUserPrivilegeAll, updateUserPrivilegeAll, deleteUserPrivilegeAll, userPrivilegeAll
-                //GENERAL
-                //issueCommentPrivilege, votePrivilege, evidencePrivilege
         ));*/
 
         createUser(new UserEntity("MEMBER", "member@mail", passwordEncoder.encode("pass"), Arrays.asList(roleRepository.findByName(RoleConstant.MEMBER))));

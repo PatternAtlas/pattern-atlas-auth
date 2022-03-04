@@ -58,8 +58,4 @@ public interface PrivilegeConstant {
     String USER_EDIT_ALL                            = "USER_EDIT_ALL";
     String USER_DELETE_ALL                          = "USER_DELETE_ALL";
     String USER_ALL                                 = "USER_ALL";
-    /** GENERAL */
-    String COMMENT                                  = "COMMENT";
-    String VOTE                                     = "VOTE";
-    String EVIDENCE                                 = "EVIDENCE";
 }
