@@ -28,12 +28,10 @@ public class UserService implements UserDetailsService {
     Logger logger = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
 
     public UserService(
-            UserRepository userRepository, RoleRepository roleRepository) {
+            UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
     }
 
     @Override
@@ -48,16 +46,8 @@ public class UserService implements UserDetailsService {
             logger.info("E-mail login");
             user = userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
         }
-        return new org.springframework.security.core.userdetails.User(user.getId().toString(), user.getPassword(), getAuthorities(user.getRoles()));
+        System.out.println("User roles: " + user.getRoles());
+        return new org.springframework.security.core.userdetails.User(user.getId().toString(), user.getPassword(), new ArrayList<>());
     }
 
-    private Collection<? extends GrantedAuthority> getAuthorities(Collection<Role> roles) {
-        List<GrantedAuthority> auths = new ArrayList<GrantedAuthority>();
-        for (Role role : roles) {
-            for (Privilege privilege : role.getPrivileges()) {
-                auths.add(new SimpleGrantedAuthority(privilege.getName()));
-            }
-        }
-        return auths;
-    }
 }

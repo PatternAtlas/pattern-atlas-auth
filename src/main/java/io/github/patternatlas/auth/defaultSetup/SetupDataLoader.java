@@ -227,7 +227,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                 //USER
                 readUserPrivilege, createUserPrivilege, updateUserPrivilege, deleteUserPrivilege, readUserPrivilegeAll, updateUserPrivilegeAll, deleteUserPrivilegeAll
         ));
-        /*createRoleIfNotFound(RoleConstant.ADMIN, Arrays.asList(
+        createRoleIfNotFound(RoleConstant.ADMIN, Arrays.asList(
                 //ISSUES
                 createIssuePrivilege, readIssuePrivilegeAll, updateIssuePrivilegeAll, deleteIssuePrivilegeAll, 
                 commentIssuePrivilegeAll, voteIssuePrivilegeAll, evidenceIssuePrivilegeAll, toPatternCandidateAll,
@@ -238,13 +238,13 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
                 createPatternPrivilege, readPatternPrivilegeAll, updatePatternPrivilegeAll, deletePatternPrivilegeAll,
                 //USER
                 readUserPrivilege, createUserPrivilege, updateUserPrivilege, deleteUserPrivilege, readUserPrivilegeAll, updateUserPrivilegeAll, deleteUserPrivilegeAll, userPrivilegeAll
-        ));*/
+        ));
 
-        createUser(new UserEntity("MEMBER", "member@mail", passwordEncoder.encode("pass"), Arrays.asList(roleRepository.findByName(RoleConstant.MEMBER))));
-        createUser(new UserEntity("MEMBER_1", "member1@mail", passwordEncoder.encode("pass"), Arrays.asList(roleRepository.findByName(RoleConstant.MEMBER))));
-        createUser(new UserEntity("EXPERT", "expert@mail", passwordEncoder.encode("pass"), Arrays.asList(roleRepository.findByName(RoleConstant.EXPERT))));
-        createUser(new UserEntity("LIBRARIAN", "librarian@mail", passwordEncoder.encode("pass"), Arrays.asList(roleRepository.findByName(RoleConstant.LIBRARIAN))));
-        //createUser(new UserEntity("ADMIN", "admin@mail", passwordEncoder.encode("pass"), Arrays.asList(roleRepository.findByName(RoleConstant.ADMIN))));
+        createUser(new UserEntity("testmember", "member@mail", passwordEncoder.encode("pass"), Arrays.asList(roleRepository.findByName(RoleConstant.MEMBER))));
+        //createUser(new UserEntity("MEMBER_1", "member1@mail", passwordEncoder.encode("pass"), Arrays.asList(roleRepository.findByName(RoleConstant.MEMBER))));
+        //createUser(new UserEntity("EXPERT", "expert@mail", passwordEncoder.encode("pass"), Arrays.asList(roleRepository.findByName(RoleConstant.EXPERT))));
+        //createUser(new UserEntity("LIBRARIAN", "librarian@mail", passwordEncoder.encode("pass"), Arrays.asList(roleRepository.findByName(RoleConstant.LIBRARIAN))));
+        createUser(new UserEntity("ADMIN", "admin@admin", passwordEncoder.encode("admin"), Arrays.asList(roleRepository.findByName(RoleConstant.ADMIN))));
 
         alreadySetup = true;
     }
